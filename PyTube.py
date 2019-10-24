@@ -16,10 +16,6 @@ def displayBanner():
 
     """)
 
-
-
-
-
     return
 
 
@@ -29,35 +25,31 @@ def displayBanner():
 
 # --------------------------------------------------------------------------------
 
-def downloadMusic(path,url):
-
-
-
+def downloadSingleMusic(path, url, outFormat):
 
     yDownloader = youtube_dl.YoutubeDL()
 
-    mp3Options = {
+
+    yDownloaderOptions = {
 
             'verbose': False,
+            'quiet': False,
             'fixup': 'detect_or_warn',                      # Automatically correct known faults of the file.
             'format': 'bestaudio/best',                     # choice of quality
             'extractaudio' : True,                          # only keep the audio
-            'audioformat' : "mp3",                          # convert to mp3 
-            'outtmpl': f"{outputFolder}/{videoTitle}.webm",                       # name the file the title of the video
+            'outtmpl': path,                                # name the file the title of the video
             'noplaylist' : True,                            # only download single song, not playlist
 
             'postprocessors': [{                            # Define postprocessors options
-
-                'key': 'FFmpegExtractAudio',                # Which engine to perform postprocessors actions
-                'preferredcodec': 'mp3',                    # Output codec
+                'key': 'FFmpegExtractAudio',                # Which engine to perform postprocessors actions                
+                'preferredcodec': outFormat,                # Output codec
                 'preferredquality': '320',                  # Which quality in bitrate
-
                 }],
         }
 
     try:
 
-        with youtube_dl.YoutubeDL(mp3Options) as yDownloader:
+        with youtube_dl.YoutubeDL(yDownloaderOptions) as yDownloader:
             yDownloader.download([url])
 
     except youtube_dl.DownloadError as e:
@@ -73,7 +65,7 @@ def getInfo(url):
 # Function to get info about a video, given by URL
 
     # Define options to set quiet mode
-    getInfoOptions = {'quiet': False, 'verbose':False}
+    getInfoOptions = {'quiet': True, 'verbose':False}
 
     # Initilize Youtube Downloader
     yDownloader = youtube_dl.YoutubeDL(getInfoOptions)
@@ -107,13 +99,16 @@ displayBanner()
 url = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
 
 
-print(getInfo(url))
+info = getInfo(url)
 
-#outputFolder = r'/home/scratch/Downloads'
-#tempName = f"{videoID}.webm"
-#musicFullPath = f"{outputFolder}/{tempName}"
+outputFolder = r'/home/scratch/Downloads'
+tempName = f"Temp_{info[0]}.webm"
+musicFullPath = f"{outputFolder}/{tempName}"
 
+# Can be mp3/flac/aac/wav
+outFormat = 'wav'
 
+downloadSingleMusic(musicFullPath,url,outFormat)
 
 # Sources
 
@@ -126,3 +121,7 @@ print(getInfo(url))
 
 
 # https://pythonbasics.org/convert-mp3-to-wav/
+
+
+# Postprocessors ? 
+# https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/postprocessor/ffmpeg.py
