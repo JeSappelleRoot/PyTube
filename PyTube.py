@@ -190,7 +190,7 @@ elif mode == 'playlist':                    # If mode is playlist
 outputFolder = args.output      # Parse output folder
 outFormat = args.format         # Parse output audio file format
 verbose = args.v                # Parse verbose argument (0 by default)
-if verbose == 0:                 # and define different case
+if verbose == 0:                # and define different case
     quiet, verbose = True, False
 elif verbose == 1:
     quiet, verbose = False, False
@@ -237,7 +237,7 @@ if not path.isdir(outputFolder):
 #
 
 
-elif mode == 'single':
+if mode == 'single':
 
     # If target is not None after argparse
     if target:
@@ -270,7 +270,7 @@ else:
 #
 
 
-if mode == 'playlist':
+elif mode == 'playlist':
 
     # If target is not None after argparse
     if target:
