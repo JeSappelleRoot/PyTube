@@ -38,7 +38,7 @@ Just run `pip3 install -r requirements.txt` to install all modules needed by PyT
 * Get information about a video   
  https://www.bogotobogo.com/VideoStreaming/YouTube/youtube-dl-embedding.php
 
- * Options availables for download process and postprocess  
+ * Availables options for download process and postprocess  
  https://github.com/ytdl-org/youtube-dl/issues/10328
 
  * Postprocess avalaibles codecs and formats  
@@ -47,4 +47,19 @@ Just run `pip3 install -r requirements.txt` to install all modules needed by PyT
  * Retrieve video links from a Youtube playlist  
  https://www.geeksforgeeks.org/python-program-to-download-complete-youtube-playlist/
 
+
+# Download music from Youtube
+
+PyTube takes several arguments in command line : 
+- `--mode` : single, playlist or file, to specify how use PyTube script  
+  - `single` mode allow to download a single music, from an URL or a video ID
+  - `playlist` mode allow to download all music from a Youtube playlist
+  - `file` mode allow to download URL or ID from a text file
+- `--url` specify the Youtube video URL
+- `--id` specify the Youtube video ID
+- `--file` specify the file where are stored URL or ID to download
+- `--output` is used to specify the output folder where music will be downloaded
+- `--name` can be use to specify a name of downloaded music
+- `--format` can specify the music format (mp3, aac, flac or wav only)
+- `-v` to increase verbosity of PyTube (maximum is `-vv`)
 
