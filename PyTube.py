@@ -24,7 +24,7 @@ def displayBanner():
 
 # --------------------------------------------------------------------------------
 
-def downloadMusic(path, url, outFormat, name, q, v):
+def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
 # Function to download a single audio file from Youtube URL
 
     # Define a downloader
@@ -33,8 +33,8 @@ def downloadMusic(path, url, outFormat, name, q, v):
     # Define options for youtube downloader
     singleURLOptions = {
 
-            'verbose': v,
-            'quiet': q,
+            'verbose': verbose,
+            'quiet': quiet,
             'fixup': 'detect_or_warn',                      # Automatically correct known faults of the file.
             'format': 'bestaudio/best',                     # choice of quality
             'extractaudio' : True,                          # only keep the audio
@@ -48,16 +48,15 @@ def downloadMusic(path, url, outFormat, name, q, v):
                 }],
         }
 
-    print(colored(f"[+] Downloading music from {name}",'yellow'))
+    print(colored(f"[+] Downloading music from {targetVideo}",'yellow'))
     # Try/Except to avoid downloading error
     try:
         # With statement to download 
         with youtube_dl.YoutubeDL(singleURLOptions) as yDownloader:
-            yDownloader.download([url])
+            yDownloader.download([targetVideo])
 
     except youtube_dl.DownloadError as e:
-        print(colored("[!] An error occured during downloading video : ",'red'))
-        print(e)
+        # Youtube-DL provide his own error message if the video is unvalaible
         exit()
 
     print(colored("[+] Downloaded successfully\n",'green'))
@@ -67,13 +66,13 @@ def downloadMusic(path, url, outFormat, name, q, v):
 
 # --------------------------------------------------------------------------------
 
-def getInfo(url):
+def getInfo(url,quiet,verbose):
 # Function to get info about a video, given by URL
 
     # Define options to set quiet mode
     getInfoOptions = {
-                        'quiet': True,
-                        'verbose':False,
+                        'quiet': quiet,
+                        'verbose':verbose,
                         'fixup': 'detect_or_warn',                        
                         }
 
@@ -114,7 +113,7 @@ formatter_class=argparse.RawDescriptionHelpFormatter,
 # Add a exclusive group to make conflicts between args
 target = parser.add_mutually_exclusive_group()
 
-parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['url','playlist','file'])
+parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['single','playlist','file'])
 target.add_argument('--url', help='Get music from this url, only for URL and playlist mode')
 target.add_argument('--id', help='Get music from this Youtube video ID (only for URL and playlist mode)')
 target.add_argument('--file', help='File which contain URL')
@@ -130,7 +129,7 @@ displayBanner()
 args = parser.parse_args()      
 
 mode = args.mode                            # Parse mode
-if mode == 'url' or mode == 'playlist':     # If mode a single url
+if mode == 'single' or mode == 'playlist':     # If mode a single url
     if args.url:                            # If full URL is specified
         target = args.url                   # target will be the URL
     elif args.id:                           # else if ID is specified
@@ -141,6 +140,14 @@ if mode == 'url' or mode == 'playlist':     # If mode a single url
 outputFolder = args.output      # Parse output folder
 outFormat = args.format         # Parse output audio file format
 verbose = args.v                # Parse verbose argument (0 by default)
+if verbose == 0:                 # and define different case
+    quiet, verbose = True, False
+elif verbose == 1:
+    quiet, verbose = False, False
+elif verbose > 1:
+    quiet, verbose = False, True
+
+
 if args.name:                   # Parse name if specified
     videoName = args.name
 
@@ -179,20 +186,23 @@ singleURL = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
 playlistURL = r'https://www.youtube.com/watch?v=IVJ3aRQso9k'
 
 
+# If videoName variable doesn't exist
 if 'videoName' not in locals(): 
-    info = getInfo(singleURL)
+    # Get info if the name is not set by the user
+    # Use the video name instead
+    info = getInfo(target, quiet, verbose)
     videoName = info[1]
+    print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
+# Define a temporary name, before final conversion
 tempName = f"{videoName}.webm"
+# Fullpath of the audio file
 musicFullPath = f"{outputFolder}/{tempName}"
 
-print(target)
-
-if mode == 'url' and target:
-    downloadMusic(musicFullPath, target, outFormat, videoName, q, v)
+# Download a single music
+if mode == 'single' and target:
+    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 else:
     print(colored('[!] A URL or and ID must be specified in url mode','red'))
     exit()
 
-
-#getInfo(playlistURL)
