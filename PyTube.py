@@ -157,7 +157,7 @@ target = parser.add_mutually_exclusive_group()
 parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['single','playlist','file'], required=True)
 target.add_argument('--url', help='Get music from this url, only for URL and playlist mode')
 target.add_argument('--id', help='Get music from this Youtube video ID (only for URL and playlist mode)')
-target.add_argument('--file', help='File which contain URL')
+target.add_argument('--file', help='File which contain URL and formats (separated by space)')
 parser.add_argument('--output', help='Specify the folder where music will be saved', required=True)
 parser.add_argument('--name', help='Specify the name (without extension) of the audio file, else PyTube will used the video name instead')
 parser.add_argument('--format', help='Specify format of the audio file [mp3/acc/flac/wav] (Default is mp3)', default='mp3',choices=['mp3','aac','flac','wav'])
@@ -183,7 +183,8 @@ if mode == 'single':
         target = args.id
     # else target variable is None
     else:
-        target = None
+        print(colored('[!] A URL or and ID must be specified in single mode','red'))
+        exit()
 
 # If mode is playlist
 elif mode == 'playlist':
@@ -202,7 +203,8 @@ elif mode == 'playlist':
         target = args.url
     # Else target variable is None    
     else:
-        target = None
+        print(colored('[!] A URL must be specified in playlist mode','red'))
+        exit()
 
 
 # If mode is file mode
@@ -222,10 +224,19 @@ elif mode == 'file':
         print(colored('[!] File mode only allow file','red'))
         print(colored('[!] Please specify file with --file instead --url','red'))
         exit()
-    if args.file:
+    # If file argument is None
+    if args.file is None:
+        print(colored("[!] File mode needs a file",'red'))
+        print(colored('[!] Please specify a file with --file argument','red'))
+        exit()
+    # Else if the file specified doesn't exist
+    elif not path.isfile(args.file):
+        print(colored("Input file does'nt exist : ",'red'))
+        print(colored(args.file,'red'))
+        exit()
+    # Else if the file exist, assign argument to target
+    elif path.isfile(args.file):
         target = args.file
-    else:
-        target = None
 
 
 
@@ -285,29 +296,24 @@ if not path.isdir(outputFolder):
 
 if mode == 'single':
 
-    # If target is not None after argparse
-    if target:
+    # If videoName variable doesn't exist
+    if 'videoName' not in locals(): 
+        # Get info if the name is not set by the user
+        # Use the video name instead
+        info = getInfo(target, quiet, verbose)
+        videoName = info[1]
+        # Display auto detected name
+        print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
-        # If videoName variable doesn't exist
-        if 'videoName' not in locals(): 
-            # Get info if the name is not set by the user
-            # Use the video name instead
-            info = getInfo(target, quiet, verbose)
-            videoName = info[1]
-            # Display auto detected name
-            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+    # Define a temporary name, before final conversion
+    tempName = f"{videoName}.webm"
+    # Fullpath of the audio file
+    musicFullPath = f"{outputFolder}/{tempName}"
 
-        # Define a temporary name, before final conversion
-        tempName = f"{videoName}.webm"
-        # Fullpath of the audio file
-        musicFullPath = f"{outputFolder}/{tempName}"
+    # Download a single music
+    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 
-        # Download a single music
-        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 
-    else:
-        print(colored('[!] A URL or and ID must be specified in single mode','red'))
-        exit()
 
 
 
@@ -318,44 +324,49 @@ if mode == 'single':
 
 elif mode == 'playlist':
 
-    # If target is not None after argparse
-    if target:
+    # Get ID and index of videos in the playlist
+    playlistInfo = getPlaylistInfos(target)
 
-        # Get ID and index of videos in the playlist
-        playlistInfo = getPlaylistInfos(target)
-        
-        # If the returned dict is empty
-        if len(playlistInfo) == 0:
-            print(colored('[!] Failed to retrieve videos of the playlist','red'))
-        # Else
-        else:
-            print(colored('[+] Videos ID successfully retrieves\n','green'))
-            # Extract ID and index from the dict to download
-            for videoInfo in playlistInfo.items():
-                target = videoInfo[1]
-                videoIndex = videoInfo[0]
-                # If videoIndex is between 1-9, add a 0 at the begining
-                if len(videoIndex) == 1:
-                    videoIndex = f"0{videoIndex}"
-                # Get info of the video with the ID
-                info = getInfo(target, quiet, verbose)
-                videoName = info[1]
-                # Display auto detected name
-                print(colored(f'[+] Video name auto-detected : {videoName}','green'))
-
-                # Define a temporary name, before final conversion
-                tempName = f"{videoIndex}_{videoName}.webm"
-                videoName = f"{videoIndex}_{videoName}"
-                # Fullpath of the audio file
-                musicFullPath = f"{outputFolder}/{tempName}"
-                
-                # Finally download each music in the playlist 
-                downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
-
+    # If the returned dict is empty
+    if len(playlistInfo) == 0:
+        print(colored('[!] Failed to retrieve videos of the playlist','red'))
+    # Else
     else:
+        print(colored('[+] Videos ID successfully retrieves\n','green'))
+        # Extract ID and index from the dict to download
+        for videoInfo in playlistInfo.items():
+            target = videoInfo[1]
+            videoIndex = videoInfo[0]
+            # If videoIndex is between 1-9, add a 0 at the begining
+            if len(videoIndex) == 1:
+                videoIndex = f"0{videoIndex}"
+            # Get info of the video with the ID
+            info = getInfo(target, quiet, verbose)
+            videoName = info[1]
+            # Display auto detected name
+            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+
+            # Define a temporary name, before final conversion
+            tempName = f"{videoIndex}_{videoName}.webm"
+            videoName = f"{videoIndex}_{videoName}"
+            # Fullpath of the audio file
+            musicFullPath = f"{outputFolder}/{tempName}"
             
-        print(colored('[!] A URL must be specified in playlist mode','red'))
-        exit()
+            # Finally download each music in the playlist 
+            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+
+
+
+
+#
+# ------------------------------- File mode -------------------------------
+#
+
+elif mode == 'file':
+
+
+
 
 
 
