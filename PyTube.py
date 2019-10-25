@@ -81,7 +81,8 @@ def getInfo(url,quiet,verbose):
                         'quiet': quiet,
                         'verbose':verbose,
                         'fixup': 'detect_or_warn', 
-                        'ignoreerrors': True                       
+                        'ignoreerrors': True,
+                        'abort-on-error': True
                         }
 
     # Initilize Youtube Downloader
@@ -89,25 +90,25 @@ def getInfo(url,quiet,verbose):
 
     # Initialize a list, which contains ID and video title
     infoList = []
-
     try:
         # Get info
         yMetaData = yDownloader.extract_info(url, download=False)
 
+        # Append info to list
+        infoList.append(yMetaData['id'])
+        
+        # If video title contains / char, it could be an issue on Linux system
+        # So, / will be replaced by -
+        if '/' in yMetaData['title']:
+            infoList.append((yMetaData['title']).replace('/','-'))
+        else:
+            infoList.append(yMetaData['title'])
 
-    except youtube_dl.DownloadError:
+    except Exception:
         # Youtube-DL provide his own error message if the video is unvalaible/country blocked
         exit()
 
-    # Append info to list
-    infoList.append(yMetaData['id'])
-    
-    # If video title contains / char, it could be an issue on Linux system
-    # So, / will be replaced by -
-    if '/' in yMetaData['title']:
-        infoList.append((yMetaData['title']).replace('/','-'))
-    else:
-        infoList.append(yMetaData['title'])
+
 
     return infoList    
 
@@ -382,15 +383,20 @@ elif mode == 'file':
 
         for target in linkList:
 
-            info = getInfo(target, quiet, verbose)
-            videoName = info[1] 
-            # Display auto detected name
-            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+            # if line is not empty
+            # bevardgisuser, post n°21
+            # View https://stackoverflow.com/questions/7896495/python-how-to-check-if-a-line-is-an-empty-line
+            if not len(target.strip()) == 0:
+                # Get info about video (name)
+                info = getInfo(target, quiet, verbose)
+                videoName = info[1] 
+                # Display auto detected name
+                print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
-            # Define a temporary name, before final conversion
-            tempName = f"{videoName}.webm"
-            # Fullpath of the audio file
-            musicFullPath = f"{outputFolder}/{tempName}"
+                # Define a temporary name, before final conversion
+                tempName = f"{videoName}.webm"
+                # Fullpath of the audio file
+                musicFullPath = f"{outputFolder}/{tempName}"
 
-            # Download a single music
-            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+                # Download a single music
+                downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
