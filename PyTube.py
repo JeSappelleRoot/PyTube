@@ -1,4 +1,5 @@
 import sys
+import csv
 import pydub
 import argparse
 import requests
@@ -364,6 +365,37 @@ elif mode == 'playlist':
 #
 
 elif mode == 'file':
+
+
+    # Open file in read mode and get his content
+    with open(target,'r') as fileStream:
+        linkList = fileStream.readlines()
+        
+
+    if len(linkList) == 0:
+        print(colored("[!] Please, don't specify an empty file",'red'))
+        exit()
+    else:
+
+        for target in linkList:
+
+            info = getInfo(target, quiet, verbose)
+            videoName = info[1]
+            # Display auto detected name
+            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+
+            # Define a temporary name, before final conversion
+            tempName = f"{videoName}.webm"
+            # Fullpath of the audio file
+            musicFullPath = f"{outputFolder}/{tempName}"
+
+            # Download a single music
+            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+    
+    
+    
+    
 
 
 
