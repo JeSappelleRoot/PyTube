@@ -1,6 +1,7 @@
-import youtube_dl
+from os import path
 import pydub
 import argparse
+import youtube_dl
 from termcolor import colored
 
 def displayBanner():
@@ -14,8 +15,7 @@ def displayBanner():
  |_|    \__, |_|\__,_|_.__/ \___|
          __/ |                   
         |___/                    
-
-    """)
+""")
 
     return
 
@@ -105,6 +105,57 @@ def getInfo(url):
 # ------------------------------ Main ------------------------------
 # ------------------------------------------------------------------
 
+parser = argparse.ArgumentParser(
+
+formatter_class=argparse.RawDescriptionHelpFormatter,
+
+description="""
+# --------------------------------------------------------- #
+' PyTube is designed to download easily music from Youtube. '
+' From URL, mutli URL in a text file or a playlist.         '
+' Many audio format can be used (mp3, aac, flac, wav)       '
+# --------------------------------------------------------- #
+"""
+)
+
+parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['url','playlist','file'], required=True)
+parser.add_argument('--folder', help='Specify the folder where music will be saved', required=True)
+parser.add_argument('--name', help='Specify the name of the audio file, else PyTube will used the video name instead')
+parser.add_argument('--format', help='Specify format of the audio file [mp3/acc/flac/wav] (Default is mp3)', default='mp3',choices=['mp3','aac','flac','wav'])
+parser.add_argument('--quiet', help='Display some informations during downloading like progression bar, video\'s ID (True by default)', default=True, action='store_true')
+parser.add_argument('--verbose', help='Increase verbosity to debug video downloading (False by default)', default=False, action='store_true')
+
+displayBanner()
+
+
+
+
+args = parser.parse_args()      # Parse arguments
+mode = args.mode                # Parse mode
+outputFolder = args.folder      # Parse output folder
+outFormat = args.format         # Parse output audio file format
+q = args.quiet                  # Parse quiet argument (True by default)
+v = args.verbose                # Parse verbose argument (False by default)
+if args.name:                   # Parse name if specified
+    videoName = args.name
+
+
+# If less than 2 arguments
+# Print help section and quit
+if len(sys.argv) < 2:
+    parser.print_help(sys.stderr)
+    exit()
+
+# Test if output folder exist
+if not path.isdir(outFolder):
+    print(colored("Output folder does'nt exist",'red'))
+    print(colored(outputFolder,'red'))
+    exit()
+
+
+
+
+
 
 # Sources
 
@@ -120,9 +171,6 @@ def getInfo(url):
 # https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/postprocessor/ffmpeg.py
 
 
-
-displayBanner()
-
 # Single music url
 singleURL = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
 
@@ -136,13 +184,11 @@ videoName = info[1]
 tempName = f"{videoName}.webm"
 musicFullPath = f"{outputFolder}/{tempName}"
 
-q = True
-v = False
 
 # Can be mp3/flac/aac/wav
 outFormat = 'mp3'
 
-downloadMusic(musicFullPath, singleURL, outFormat, videoName, q, v)
+#downloadMusic(musicFullPath, singleURL, outFormat, videoName, q, v)
 
 
 #getInfo(playlistURL)
