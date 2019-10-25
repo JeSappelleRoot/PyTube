@@ -2,6 +2,16 @@
 
 PyTube is an implementation of the great Youtube_dl library
 
+- [PyTube](#pytube)
+  - [Requirements](#requirements)
+  - [Requirement file](#requirement-file)
+- [Sources and ideas](#sources-and-ideas)
+  - [Command line conflicts](#command-line-conflicts)
+  - [Single mode download](#single-mode-download)
+    - [Some examples](#some-examples)
+  - [Playlist mode download](#playlist-mode-download)
+    - [Example](#example)
+
 
 ## Requirements
 
