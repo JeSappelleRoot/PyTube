@@ -186,7 +186,56 @@ Deleting original file /home/Doe/Downloads/Nausicaä of the Valley of the Wind S
 
 PyTube can download all music in a Youtube playlist, you need to use the URL (**not a video ID**)
 
-You can specify `--format` argument, all audio files will have the same format
+You can specify `--format` argument, all audio files will have the same format  
+The URL specified with `--url` argument can have an index number at the end, youtube_dl doesn't care (e.g `https://www.youtube.com/watch?v=znqOAm-DxLk&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj&index=4`)
 
-### Examples
+If a video is unavailable in the playlist (geo-restriction,removed video), PyTube will aborted the download of the link but not the entire playlist
+
+> PyTube doesn't use the youtube_dl to download entire playlist  
+> Requests and BeautifulSoup are used, to parse HTML response of the given playlist URL  
+> All links are parsed to deduce Youtube video ID
+
+
+
+### Example
+
+* `python3 PyTube.py --mode playlist --url https://www.youtube.com/watch?v=unqOAm-DxLk&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj --output ~/Downloads/playlist`
+
+```
+ _____    _______    _          
+ |  __ \  |__   __|  | |         
+ | |__) |   _| |_   _| |__   ___ 
+ |  ___/ | | | | | | | '_ \ / _ \
+ | |   | |_| | | |_| | |_) |  __/
+ |_|    \__, |_|\__,_|_.__/ \___|
+         __/ |                   
+        |___/                    
+
+[+] Retrieve ID of videos in the playlist
+[+] Videos ID successfully retrieves
+
+[+] Video name auto-detected : You Got A Friend In Me - Randy Newman (Toy Story)
+[+] Downloading music from R9SK4OseyBo
+[+] Downloaded successfully
+
+[+] Video name auto-detected : The Time of Your Life - Randy Newman (A Bug's Life)
+[+] Downloading music from NlePQR7CMMg
+[+] Downloaded successfully
+
+[+] Video name auto-detected : When She Loved Me - Sarah McLachlan (Toy Story 2)
+[+] Downloading music from lzKAmpoeNBQ
+[+] Downloaded successfully
+
+[+] Video name auto-detected : If I Didn't Have You - Billy Crystal & John Goodman (Monsters Inc.)
+[+] Downloading music from unqOAm-DxLk
+[+] Downloaded successfully
+
+[+] Video name auto-detected : Real Gone - Sheryl Crow (Cars)
+[+] Downloading music from Y0wU9BTzfB8
+[+] Downloaded successfully
+
+[...]
+```
+
+
 
