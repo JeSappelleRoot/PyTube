@@ -305,6 +305,11 @@ if mode == 'single':
         # Get info if the name is not set by the user
         # Use the video name instead
         info = getInfo(target, quiet, verbose)
+        # If can"t retrieve info about a video, skip the link and add empty line
+        if info == False:
+            print("\n")
+            exit()        
+
         videoName = info[1]
 
         # Display auto detected name
@@ -346,10 +351,10 @@ elif mode == 'playlist':
             # Get info of the video with the ID
             info = getInfo(target, quiet, verbose)
 
-                # If can"t retrieve info about a video, skip the link and add empty line
-                if info == False:
-                    print("\n")
-                    continue
+            # If can"t retrieve info about a video, skip the link and add empty line
+            if info == False:
+                print("\n")
+                continue
 
 
             videoName = info[1]
