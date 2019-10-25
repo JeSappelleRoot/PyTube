@@ -1,5 +1,4 @@
 import sys
-import pydub
 import argparse
 import requests
 import youtube_dl
