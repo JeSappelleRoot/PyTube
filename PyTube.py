@@ -34,8 +34,6 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
     # Define a downloader
     yDownloader = youtube_dl.YoutubeDL()
 
-    print(path)
-
     # Define options for youtube downloader
     singleLOptions = {
 
@@ -81,8 +79,7 @@ def getInfo(url,quiet,verbose):
                         'quiet': quiet,
                         'verbose':verbose,
                         'fixup': 'detect_or_warn', 
-                        'ignoreerrors': True,
-                        'abort-on-error': True
+                        'ignoreerrors': True
                         }
 
     # Initilize Youtube Downloader
@@ -106,7 +103,7 @@ def getInfo(url,quiet,verbose):
 
     except Exception:
         # Youtube-DL provide his own error message if the video is unvalaible/country blocked
-        exit()
+        return False
 
 
 
@@ -389,6 +386,10 @@ elif mode == 'file':
             if not len(target.strip()) == 0:
                 # Get info about video (name)
                 info = getInfo(target, quiet, verbose)
+                # If can"t retrieve info about a video, skip the link and add empty line
+                if info == False:
+                    print("\n")
+                    continue
                 videoName = info[1] 
                 # Display auto detected name
                 print(colored(f'[+] Video name auto-detected : {videoName}','green'))
