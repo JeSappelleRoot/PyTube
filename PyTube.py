@@ -103,6 +103,9 @@ def getInfo(url,quiet,verbose):
 
     except Exception:
         # Youtube-DL provide his own error message if the video is unvalaible/country blocked
+        # Return false if can't grab some info
+        # In modes (single, playlist, file), a False return indicate that the link
+        # is wrong or the video is unvalaible, exit() or continue, depends of case
         return False
 
 
