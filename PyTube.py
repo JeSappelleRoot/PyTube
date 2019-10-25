@@ -169,44 +169,80 @@ displayBanner()
 # Parse arguments
 args = parser.parse_args()      
 
-mode = args.mode                            # Parse mode
-
-if mode == 'single':                        # If mode is single url
-    if args.url:                            # If full URL is specified
-        target = args.url                   # target will be the URL
-    elif args.id:                           # else if ID is specified
-        target = args.id                    # target will be the video ID
-    else:                                   # else target variable is None
+# Parse mode
+mode = args.mode
+# If mode is single url
+if mode == 'single':
+    # If full URL is specified
+    if args.url:
+        # target will be the URL
+        target = args.url
+    # else if ID is specified    
+    elif args.id:
+        # target will be the video ID
+        target = args.id
+    # else target variable is None
+    else:
         target = None
 
-elif mode == 'playlist':                    # If mode is playlist
-    if args.name:                           # If a name is gived in argument, playlist mode choose names of audio files
+# If mode is playlist
+elif mode == 'playlist':
+    # If a name is gived in argument, playlist mode choose names of audio files
+    if args.name:
         print(colored('[!] Playlist mode only allow automatic name','red'))
         print(colored('[!] Please remove --name argument','red'))
         exit()
-    if args.id:                             # If a playlist ID is given, only URL is allowed
+    # If a playlist ID is given, only URL is allowed    
+    if args.id:
         print(colored('[!] Playlist mode only allow URL','red'))
         print(colored('[!] Please specify url with --url instead --id','red'))
         exit()
-    if args.url:                            # Only URL for the target, no ID
+    # Only URL for the target, no ID
+    if args.url:
         target = args.url
+    # Else target variable is None    
     else:
-        target = None                       # Else target variable is None
+        target = None
+
+
+# If mode is file mode
+elif mode == 'file':
+    # If a name is gived in argument, playlist mode choose names of audio files
+    if args.name:
+        print(colored('[!] File mode only allow automatic name','red'))
+        print(colored('[!] Please remove --name argument','red'))
+        exit()
+    # If an ID is given, only file is allowed    
+    if args.id:
+        print(colored('[!] File mode only allow file','red'))
+        print(colored('[!] Please specify file with --file instead --id','red'))
+        exit()
+    # If an URL is given, only file is allowed
+    if args.url:
+        print(colored('[!] File mode only allow file','red'))
+        print(colored('[!] Please specify file with --file instead --url','red'))
+        exit()
+    if args.file:
+        target = args.file
+    else:
+        target = None
 
 
 
 outputFolder = args.output      # Parse output folder
 outFormat = args.format         # Parse output audio file format
-verbose = args.v                # Parse verbose argument (0 by default)
-if verbose == 0:                # and define different case
+
+# Parse verbose argument (0 by default) and define different case
+verbose = args.v 
+if verbose == 0:
     quiet, verbose = True, False
 elif verbose == 1:
     quiet, verbose = False, False
 elif verbose > 1:
     quiet, verbose = False, True
 
-
-if args.name:                   # Parse name if specified
+# Parse name if specified
+if args.name:
     videoName = args.name
 
 # If less than 2 arguments
@@ -220,6 +256,8 @@ if not path.isdir(outputFolder):
     print(colored("Output folder does'nt exist",'red'))
     print(colored(outputFolder,'red'))
     exit()
+
+
 
 
 
@@ -318,6 +356,7 @@ elif mode == 'playlist':
             
         print(colored('[!] A URL must be specified in playlist mode','red'))
         exit()
+
 
 
 
