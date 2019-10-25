@@ -1,9 +1,11 @@
 import sys
 import pydub
 import argparse
+import requests
 import youtube_dl
 from os import path
 from termcolor import colored
+from bs4 import BeautifulSoup
 
 def displayBanner():
 
@@ -31,7 +33,7 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
     yDownloader = youtube_dl.YoutubeDL()
 
     # Define options for youtube downloader
-    singleURLOptions = {
+    singleLOptions = {
 
             'verbose': verbose,
             'quiet': quiet,
@@ -39,7 +41,7 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
             'format': 'bestaudio/best',                     # choice of quality
             'extractaudio' : True,                          # only keep the audio
             'outtmpl': path,                                # name the file the title of the video
-            'noplaylist' : False,                            # only download single song, not playlist
+            'noplaylist' : True,                            # only download single song, not playlist
 
             'postprocessors': [{                            # Define postprocessors options
                 'key': 'FFmpegExtractAudio',                # Which engine to perform postprocessors actions                
@@ -48,15 +50,16 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
                 }],
         }
 
+
     print(colored(f"[+] Downloading music from {targetVideo}",'yellow'))
     # Try/Except to avoid downloading error
     try:
         # With statement to download 
-        with youtube_dl.YoutubeDL(singleURLOptions) as yDownloader:
+        with youtube_dl.YoutubeDL(singleLOptions) as yDownloader:
             yDownloader.download([targetVideo])
 
-    except youtube_dl.DownloadError as e:
-        # Youtube-DL provide his own error message if the video is unvalaible
+    except youtube_dl.DownloadError:
+        # Youtube-DL provide his own error message if the video is unvalaible/country blocked
         exit()
 
     print(colored("[+] Downloaded successfully\n",'green'))
@@ -73,7 +76,8 @@ def getInfo(url,quiet,verbose):
     getInfoOptions = {
                         'quiet': quiet,
                         'verbose':verbose,
-                        'fixup': 'detect_or_warn',                        
+                        'fixup': 'detect_or_warn', 
+                        'ignoreerrors': True                       
                         }
 
     # Initilize Youtube Downloader
@@ -87,18 +91,55 @@ def getInfo(url,quiet,verbose):
         yMetaData = yDownloader.extract_info(url, download=False)
 
 
-    except youtube_dl.DownloadError as e:
-        # Catch errors ?
-        print(colored("[!] An error occured during get video info : ",'red'))
-        print(e)
+    except youtube_dl.DownloadError:
+        # Youtube-DL provide his own error message if the video is unvalaible/country blocked
         exit()
 
     # Append info to list
     infoList.append(yMetaData['id'])
     infoList.append(yMetaData['title'])
 
+    return infoList    
 
-    return infoList
+# --------------------------------------------------------------------------------
+
+def getPlaylistLinks(target):
+# Function to retrieve links of videos in playlist
+
+    print(colored('[+] Retrieve ID of videos in the playlist','yellow'))
+
+    # Make a request to get HTML document
+    request = requests.get(target)
+    # Parse previous request in BeautifulSoup with html parser
+    ySoup = BeautifulSoup(request.content, 'html.parser')
+
+    rawLinks = []
+    # Loop on the content to get the good class in <a> labels
+    for link in ySoup.findAll('a', attrs={'class': 'spf-link playlist-video clearfix yt-uix-sessionlink spf-link'}):
+        rawLinks.append(link.get('href'))
+
+    # Clean rawLinks
+    # /watch?vOAhCfI5hLjU&listPLwPd55WyRFm-qt3k8Gh9QS-DHSrY0z5SB&index1
+    # Split on '=' give ['/watch?v', 'OAhCfI5hLjU&list', 'PLwPd55WyRFm-qt3k8Gh9QS-DHSrY0z5SB&index', '1']
+    # index [1] give 'OAhCfI5hLjU&list'
+    # Split on '&' give ['OAhCfI5hLjU', 'list']
+    # Get video ID with index [0]
+
+    # Same process to get index of video
+
+    # Initiate a dict to contain index of video and ID
+    videosID = {}
+
+    for link in rawLinks:
+        idVideo = (link.split('=')[1]).split('&')[0]            # Get Youtube video ID
+        indexVideo= (link.split('&')[-1]).split('=')[-1]        # Get Youtube video index in the playlist
+
+        videosID[indexVideo] = idVideo                          # Add entry in dict
+
+    
+
+    return videosID
+
 
 
 # ------------------------------------------------------------------
@@ -129,13 +170,22 @@ displayBanner()
 args = parser.parse_args()      
 
 mode = args.mode                            # Parse mode
-if mode == 'single' or mode == 'playlist':     # If mode a single url
+
+if mode == 'single':                        # If mode is single url
     if args.url:                            # If full URL is specified
         target = args.url                   # target will be the URL
     elif args.id:                           # else if ID is specified
         target = args.id                    # target will be the video ID
     else:                                   # else target variable is None
         target = None
+
+elif mode == 'playlist':                    # If mode is playlist
+    if args.url:                            # Only URL for the target
+        target = args.url
+    else:
+        target = None                       # Else target variable is None
+
+
 
 outputFolder = args.output      # Parse output folder
 outFormat = args.format         # Parse output audio file format
@@ -178,31 +228,90 @@ if not path.isdir(outputFolder):
 # Postprocessors options 
 # https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/postprocessor/ffmpeg.py
 
+# Retrieve playlist URL songs
+# https://www.geeksforgeeks.org/python-program-to-download-complete-youtube-playlist/
+
 
 # Single music url
 singleURL = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
 
 # Playlis url
-playlistURL = r'https://www.youtube.com/watch?v=IVJ3aRQso9k'
+#playlistID = r'https://www.youtube.com/watch?v=OAhCfI5hLjU&list=PLwPd55WyRFm-qt3k8Gh9QS-DHSrY0z5SB'
+playlistID = r'https://www.youtube.com/watch?v=R9SK4OseyBo&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj' 
 
+#
+# ------------------------------- Playlist mode -------------------------------
+#
 
-# If videoName variable doesn't exist
-if 'videoName' not in locals(): 
-    # Get info if the name is not set by the user
-    # Use the video name instead
-    info = getInfo(target, quiet, verbose)
-    videoName = info[1]
-    print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+# If target is not None after argparse
+if mode == 'playlist' and target:
 
-# Define a temporary name, before final conversion
-tempName = f"{videoName}.webm"
-# Fullpath of the audio file
-musicFullPath = f"{outputFolder}/{tempName}"
+    # Get ID of videos in the playlist
+    IDs = getPlaylistLinks(target)
+    
+    # If the returned dict is empty
+    if len(IDs) == 0:
+        print(colored('[!] Failed to retrieve videos of the playlist','red'))
+    # Else
+    else:
+        print(colored('[+] Videos ID successfully retrieves\n','green'))
+        # Extract ID and index from the dict to download
+        for videoInfo in IDs.items():
+            target = videoInfo[1]
+            videoIndex = videoInfo[0]
+            # If videoIndex is between 1-9, add a 0 at the begining
+            if len(videoIndex) == 1:
+                videoIndex = f"0{videoIndex}"
 
-# Download a single music
-if mode == 'single' and target:
-    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+            info = getInfo(target, quiet, verbose)
+            videoName = info[1]
+            # Display auto detected name
+            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+
+            # Define a temporary name, before final conversion
+            tempName = f"{videoIndex}_{videoName}.webm"
+            videoName = f"{videoIndex}_{videoName}"
+            # Fullpath of the audio file
+            musicFullPath = f"{outputFolder}/{tempName}"
+            
+            # Finally download each music in the playlist 
+            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
 else:
-    print(colored('[!] A URL or and ID must be specified in url mode','red'))
+        
+    print(colored('[!] A URL must be specified in playlist mode','red'))
     exit()
+
+
+
+
+
+#
+# ------------------------------- Single mode -------------------------------
+#
+
+# If target is not None after argparse
+if mode == 'single' and target:
+
+    # If videoName variable doesn't exist
+    if 'videoName' not in locals(): 
+        # Get info if the name is not set by the user
+        # Use the video name instead
+        info = getInfo(target, quiet, verbose)
+        videoName = info[1]
+        # Display auto detected name
+        print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+
+    # Define a temporary name, before final conversion
+    tempName = f"{videoName}.webm"
+    # Fullpath of the audio file
+    musicFullPath = f"{outputFolder}/{tempName}"
+
+    # Download a single music
+    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+ 
+else:
+    print(colored('[!] A URL or and ID must be specified in single mode','red'))
+    exit()
+
 
