@@ -3,7 +3,7 @@
 PyTube is an implementation of the great Youtube_dl library
 
 
-## Requirements
+## Requirements
 
 PyTube use several libraries : 
 - **sys** for some checks  
@@ -15,7 +15,7 @@ PyTube use several libraries :
 - **BeautifulSoup** to parse requests module results
 
 
-### Requirement file
+## Requirement file
 
 ```
 argparse==1.2.1
