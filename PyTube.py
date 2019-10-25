@@ -154,7 +154,7 @@ formatter_class=argparse.RawDescriptionHelpFormatter,
 # Add a exclusive group to make conflicts between args
 target = parser.add_mutually_exclusive_group()
 
-parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['single','playlist','file'])
+parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['single','playlist','file'], required=True)
 target.add_argument('--url', help='Get music from this url, only for URL and playlist mode')
 target.add_argument('--id', help='Get music from this Youtube video ID (only for URL and playlist mode)')
 target.add_argument('--file', help='File which contain URL')
