@@ -103,7 +103,7 @@ def getInfo(url,quiet,verbose):
 
 # --------------------------------------------------------------------------------
 
-def getPlaylistLinks(target):
+def getPlaylistInfos(target):
 # Function to retrieve links of videos in playlist
 
     print(colored('[+] Retrieve ID of videos in the playlist','yellow'))
@@ -249,23 +249,23 @@ if mode == 'playlist':
     # If target is not None after argparse
     if target:
 
-        # Get ID of videos in the playlist
-        IDs = getPlaylistLinks(target)
+        # Get ID and index of videos in the playlist
+        playlistInfo = getPlaylistInfos(target)
         
         # If the returned dict is empty
-        if len(IDs) == 0:
+        if len(playlistInfo) == 0:
             print(colored('[!] Failed to retrieve videos of the playlist','red'))
         # Else
         else:
             print(colored('[+] Videos ID successfully retrieves\n','green'))
             # Extract ID and index from the dict to download
-            for videoInfo in IDs.items():
+            for videoInfo in playlistInfo.items():
                 target = videoInfo[1]
                 videoIndex = videoInfo[0]
                 # If videoIndex is between 1-9, add a 0 at the begining
                 if len(videoIndex) == 1:
                     videoIndex = f"0{videoIndex}"
-
+                # Get info of the video with the ID
                 info = getInfo(target, quiet, verbose)
                 videoName = info[1]
                 # Display auto detected name
@@ -295,7 +295,7 @@ if mode == 'playlist':
 
 
 elif mode == 'single':
-    
+
     # If target is not None after argparse
     if target:
 
