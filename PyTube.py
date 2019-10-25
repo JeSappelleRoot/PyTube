@@ -345,6 +345,13 @@ elif mode == 'playlist':
                 videoIndex = f"0{videoIndex}"
             # Get info of the video with the ID
             info = getInfo(target, quiet, verbose)
+
+                # If can"t retrieve info about a video, skip the link and add empty line
+                if info == False:
+                    print("\n")
+                    continue
+
+
             videoName = info[1]
 
             # Display auto detected name
@@ -386,10 +393,12 @@ elif mode == 'file':
             if not len(target.strip()) == 0:
                 # Get info about video (name)
                 info = getInfo(target, quiet, verbose)
+                
                 # If can"t retrieve info about a video, skip the link and add empty line
                 if info == False:
                     print("\n")
                     continue
+
                 videoName = info[1] 
                 # Display auto detected name
                 print(colored(f'[+] Video name auto-detected : {videoName}','green'))
