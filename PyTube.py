@@ -280,13 +280,17 @@ if not path.isdir(outputFolder):
 
 # Sources
 
+# The best source I used to make PyTube
 # https://willdrevo.com/downloading-youtube-and-soundcloud-audio-with-python-and-pandas
-# https://www.bogotobogo.com/VideoStreaming/YouTube/youtube-dl-embedding.php
-# https://github.com/ytdl-org/youtube-dl
-# https://spapas.github.io/2018/03/06/easy-youtube-mp3-downloading/
-# https://github.com/ytdl-org/youtube-dl/issues/10328
 
-# https://pythonbasics.org/convert-mp3-to-wav/
+# Get information about a video
+# https://www.bogotobogo.com/VideoStreaming/YouTube/youtube-dl-embedding.php
+
+# Official documentation of Youtube_dl module
+# https://github.com/ytdl-org/youtube-dl
+
+# Availables options for download process and postprocess  
+# https://github.com/ytdl-org/youtube-dl/issues/10328
 
 # Postprocessors options 
 # https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/postprocessor/ffmpeg.py
