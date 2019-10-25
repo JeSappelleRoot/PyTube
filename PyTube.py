@@ -232,15 +232,6 @@ if not path.isdir(outputFolder):
 # https://www.geeksforgeeks.org/python-program-to-download-complete-youtube-playlist/
 
 
-# Single music url
-singleURL = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
-
-# Playlis url
-#playlistID = r'https://www.youtube.com/watch?v=OAhCfI5hLjU&list=PLwPd55WyRFm-qt3k8Gh9QS-DHSrY0z5SB'
-playlistID = r'https://www.youtube.com/watch?v=R9SK4OseyBo&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj' 
-
-
-
 #
 # ------------------------------- Single mode -------------------------------
 #
