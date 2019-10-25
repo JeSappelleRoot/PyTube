@@ -259,9 +259,9 @@ if mode == 'single':
         # Download a single music
         downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 
-else:
-    print(colored('[!] A URL or and ID must be specified in single mode','red'))
-    exit()
+    else:
+        print(colored('[!] A URL or and ID must be specified in single mode','red'))
+        exit()
 
 
 
