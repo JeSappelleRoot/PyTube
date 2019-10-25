@@ -239,6 +239,41 @@ singleURL = r'https://www.youtube.com/watch?v=fEqrt6nZTS4'
 #playlistID = r'https://www.youtube.com/watch?v=OAhCfI5hLjU&list=PLwPd55WyRFm-qt3k8Gh9QS-DHSrY0z5SB'
 playlistID = r'https://www.youtube.com/watch?v=R9SK4OseyBo&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj' 
 
+
+
+#
+# ------------------------------- Single mode -------------------------------
+#
+
+
+elif mode == 'single':
+
+    # If target is not None after argparse
+    if target:
+
+        # If videoName variable doesn't exist
+        if 'videoName' not in locals(): 
+            # Get info if the name is not set by the user
+            # Use the video name instead
+            info = getInfo(target, quiet, verbose)
+            videoName = info[1]
+            # Display auto detected name
+            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+
+        # Define a temporary name, before final conversion
+        tempName = f"{videoName}.webm"
+        # Fullpath of the audio file
+        musicFullPath = f"{outputFolder}/{tempName}"
+
+        # Download a single music
+        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+else:
+    print(colored('[!] A URL or and ID must be specified in single mode','red'))
+    exit()
+
+
+
 #
 # ------------------------------- Playlist mode -------------------------------
 #
@@ -289,35 +324,5 @@ if mode == 'playlist':
 
 
 
-#
-# ------------------------------- Single mode -------------------------------
-#
-
-
-elif mode == 'single':
-
-    # If target is not None after argparse
-    if target:
-
-        # If videoName variable doesn't exist
-        if 'videoName' not in locals(): 
-            # Get info if the name is not set by the user
-            # Use the video name instead
-            info = getInfo(target, quiet, verbose)
-            videoName = info[1]
-            # Display auto detected name
-            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
-
-        # Define a temporary name, before final conversion
-        tempName = f"{videoName}.webm"
-        # Fullpath of the audio file
-        musicFullPath = f"{outputFolder}/{tempName}"
-
-        # Download a single music
-        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
-
-else:
-    print(colored('[!] A URL or and ID must be specified in single mode','red'))
-    exit()
 
 
