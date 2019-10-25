@@ -7,6 +7,8 @@ from os import path
 from termcolor import colored
 from bs4 import BeautifulSoup
 
+
+
 def displayBanner():
 
     print(r"""
@@ -145,7 +147,6 @@ def getPlaylistInfos(target):
         videosID[indexVideo] = idVideo                          # Add entry in dict
 
     
-
     return videosID
 
 
@@ -247,7 +248,6 @@ elif mode == 'file':
         target = args.file
 
 
-
 outputFolder = args.output      # Parse output folder
 outFormat = args.format         # Parse output audio file format
 
@@ -275,8 +275,6 @@ if not path.isdir(outputFolder):
     print(colored("Output folder does'nt exist",'red'))
     print(colored(outputFolder,'red'))
     exit()
-
-
 
 
 
@@ -324,8 +322,6 @@ if mode == 'single':
 
 
 
-
-
 #
 # ------------------------------- Playlist mode -------------------------------
 #
@@ -367,8 +363,6 @@ elif mode == 'playlist':
 
 
 
-
-
 #
 # ------------------------------- File mode -------------------------------
 #
@@ -400,19 +394,3 @@ elif mode == 'file':
 
             # Download a single music
             downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
-
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
