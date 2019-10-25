@@ -180,7 +180,13 @@ if mode == 'single':                        # If mode is single url
         target = None
 
 elif mode == 'playlist':                    # If mode is playlist
-    if args.url:                            # Only URL for the target
+    if args.name:                           # If a name is gived in argument, playlist mode choose names of audio files
+        print(colored('[!] Playlist mode only allow automatic name','red'))
+        exit()
+    if args.id:                             # If a playlist ID is given, only URL is allowed
+        print(colored('[!] Playlist mode only allow URL','red'))
+        exit()
+    if args.url:                            # Only URL for the target, no ID
         target = args.url
     else:
         target = None                       # Else target variable is None
