@@ -1,5 +1,4 @@
 import sys
-import csv
 import pydub
 import argparse
 import requests
@@ -32,6 +31,8 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
 
     # Define a downloader
     yDownloader = youtube_dl.YoutubeDL()
+
+    print(path)
 
     # Define options for youtube downloader
     singleLOptions = {
@@ -98,7 +99,13 @@ def getInfo(url,quiet,verbose):
 
     # Append info to list
     infoList.append(yMetaData['id'])
-    infoList.append(yMetaData['title'])
+    
+    # If video title contains / char, it could be an issue on Linux system
+    # So, / will be replaced by -
+    if '/' in yMetaData['title']:
+        infoList.append((yMetaData['title']).replace('/','-'))
+    else:
+        infoList.append(yMetaData['title'])
 
     return infoList    
 
@@ -303,6 +310,7 @@ if mode == 'single':
         # Use the video name instead
         info = getInfo(target, quiet, verbose)
         videoName = info[1]
+
         # Display auto detected name
         print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
@@ -344,6 +352,7 @@ elif mode == 'playlist':
             # Get info of the video with the ID
             info = getInfo(target, quiet, verbose)
             videoName = info[1]
+
             # Display auto detected name
             print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
@@ -380,7 +389,7 @@ elif mode == 'file':
         for target in linkList:
 
             info = getInfo(target, quiet, verbose)
-            videoName = info[1]
+            videoName = info[1] 
             # Display auto detected name
             print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
