@@ -8,6 +8,7 @@ PyTube is an implementation of the great Youtube_dl library
 - [Sources and ideas](#sources-and-ideas)
   - [Command line conflicts](#command-line-conflicts)
   - [Full URL or video ID ?](#full-url-or-video-id)
+- [Download modes](#download-modes)
   - [Single mode download](#single-mode-download)
     - [Some examples](#some-examples)
   - [Playlist mode download](#playlist-mode-download)
@@ -95,6 +96,8 @@ PyTube can download music from :
 - URL only in **playlist mode**
 
 On a video URL (`https://www.youtube.com/watch?v=tLVDOTq5Vc0`), the ID will be the part after `watch?v=` : here it's `tLVDOTq5Vc0`
+
+# Download modes
 
 ## Single mode download
 
