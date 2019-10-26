@@ -73,7 +73,7 @@ PyTube takes several arguments in command line :
 - `--id` specify the Youtube video ID
 - `--file` specify the file where are stored URL or ID to download
 - `--output` is used to specify the output folder where music will be downloaded
-- `--name` can be use to specify a name of downloaded music (**by default, PyTube use the video name to named the audio file**)
+- `--name` can be use to specify a name of downloaded music (**by default, PyTube use the video name to named the audio file, and replace `/` char by `-`**)
 - `--format` can specify the music format with mp3, aac, flac or wav only (**default is mp3**)
 - `-v` to increase verbosity of PyTube (maximum is `-vv`)
   - First level of verbosity `-v` add download information (e.g progress bar) 
@@ -232,7 +232,9 @@ PyTube can download all music in a Youtube playlist, you need to use the URL (**
 You can specify `--format` argument, all audio files will have the same format  
 The URL specified with `--url` argument can have an index number at the end, youtube_dl doesn't care (e.g `https://www.youtube.com/watch?v=znqOAm-DxLk&list=PLxXXw_Jlg3EOqB-gyY3pXleCaB0-iYUKj&index=4`)
 
-If a video is unavailable in the playlist (geo-restriction,removed video), PyTube will aborted the download of the link but not the entire playlist
+If a video is unavailable in the playlist (geo-restriction,removed video), PyTube will aborted the download of the video but not the entire playlist
+
+Note that PyTube don't allow `--name` argument in playlist mode. The video name will be use as audio file name, and use index of video in the playlist as a prefix (`01_video-name`, `02_video-name`, `03_video-name`)
 
 > PyTube doesn't use the youtube_dl to download entire playlist  
 > Requests and BeautifulSoup are used, to parse HTML response of the given playlist URL  
