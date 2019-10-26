@@ -7,7 +7,7 @@ PyTube is an implementation of the great Youtube_dl library
   - [Requirement file](#requirement-file)
 - [Sources and ideas](#sources-and-ideas)
   - [Command line conflicts](#command-line-conflicts)
-  - [Full URL or video ID ?](#full-url-or-video-id)
+- [Full URL or video ID ?](#full-url-or-video-id)
 - [Download modes](#download-modes)
   - [Single mode download](#single-mode-download)
     - [Some examples](#some-examples)
@@ -88,7 +88,7 @@ Some arguments are incompatibles :
 - with `--mode file`, the argument `--format` will be use for each audio file
 - with `--mode playlist` and `--mode file`, **you can't specify a name for audio files**, PyTube will choose and assign automatically names (based on video title)
 
-## Full URL or video ID ? 
+# Full URL or video ID ? 
 
 PyTube can download music from : 
 - URL and video ID in **single mode**
