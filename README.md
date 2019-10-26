@@ -6,7 +6,7 @@ PyTube is an implementation of the great Youtube_dl library
   - [Requirements](#requirements)
   - [Requirement file](#requirement-file)
 - [Sources and ideas](#sources-and-ideas)
-  - [Command line conflicts](#command-line-conflicts)
+- [Command line conflicts](#command-line-conflicts)
 - [Full URL or video ID ?](#full-url-or-video-id)
 - [Download modes](#download-modes)
   - [Single mode download](#single-mode-download)
@@ -79,7 +79,7 @@ PyTube takes several arguments in command line :
   - First level of verbosity `-v` add download information (e.g progress bar) 
   - Last level of verbosity `-vv` add debug information about youtube_dl module
 
-## Command line conflicts
+# Command line conflicts
 
 Some arguments are incompatibles : 
 - Only one mode at a time
