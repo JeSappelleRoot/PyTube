@@ -7,6 +7,7 @@ PyTube is an implementation of the great Youtube_dl library
   - [Requirement file](#requirement-file)
 - [Sources and ideas](#sources-and-ideas)
   - [Command line conflicts](#command-line-conflicts)
+  - [Full URL or video ID ?](#full-url-or-video-id)
   - [Single mode download](#single-mode-download)
     - [Some examples](#some-examples)
   - [Playlist mode download](#playlist-mode-download)
@@ -84,18 +85,26 @@ Some arguments are incompatibles :
 - with `--mode file`, the argument `--format` will be use for each audio file
 - with `--mode playlist` and `--mode file`, **you can't specify a name for audio files**, PyTube will choose and assign automatically names (based on video title)
 
+## Full URL or video ID ? 
+
+PyTube can download music from : 
+- URL and video ID in **single mode**
+- URL and video ID in **file mode**
+- URL only in **playlist mode**
+
+On a video URL (`https://www.youtube.com/watch?v=tLVDOTq5Vc0`), the ID will be the part after `watch?v=` : here it's `tLVDOTq5Vc0`
 
 ## Single mode download
 
 Single mode is the easiest way to download music with PyTube.  
 With `--format` argument, audio file will be in MP3 format 
 
-You can use a full URL with `--url `like `https://www.youtube.com/watch?v=rZUppxT38Zk` or just the Youtube video ID with `--id`, here `rZUppxT38Zk` (part after `watch?v=` section)
+You can use a full URL with `--url ` or just the Youtube video ID with `--id`
 
 
 ### Some examples
 
-* `python3 PyTube.py --mode single --url https://www.youtube.com/watch\?v\=rZUppxT38Zk --output ~/Downloads`
+* With URL : `python3 PyTube.py --mode single --url https://www.youtube.com/watch\?v\=rZUppxT38Zk --output ~/Downloads`
 
 
 ```
@@ -112,6 +121,25 @@ You can use a full URL with `--url `like `https://www.youtube.com/watch?v=rZUppx
 [+] Video name auto-detected : Nausicaä of the Valley of the Wind Soundtrack
 [+] Downloading music from https://www.youtube.com/watch?v=rZUppxT38Zk
 [+] Downloaded successfully
+```
+
+* With video ID (shorter command line) : `python3 PyTube.py --mode single --id rZUppxT38Zk --output ~/Downloads`
+
+```
+  _____    _______    _          
+ |  __ \  |__   __|  | |         
+ | |__) |   _| |_   _| |__   ___ 
+ |  ___/ | | | | | | | '_ \ / _ \
+ | |   | |_| | | |_| | |_) |  __/
+ |_|    \__, |_|\__,_|_.__/ \___|
+         __/ |                   
+        |___/                    
+
+[+] Video name auto-detected : Nausicaä of the Valley of the Wind Soundtrack
+[+] Downloading music from rZUppxT38Zk
+[+] Downloaded successfully
+
+
 ```
 
 * Same command with 1 level of verbosity (`-v`)
