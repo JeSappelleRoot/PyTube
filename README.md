@@ -12,6 +12,8 @@ PyTube is an implementation of the great Youtube_dl library
     - [Some examples](#some-examples)
   - [Playlist mode download](#playlist-mode-download)
     - [Example](#example)
+  - [File mode download](#file-mode-download)
+    - [Example with mixed URL and video ID](#example-with-mixed-url-and-video-id)
 
 
 ## Requirements
@@ -276,4 +278,77 @@ If a video is unavailable in the playlist (geo-restriction,removed video), PyTub
 ```
 
 
+## File mode download
 
+As single mode download, file mode can parse a text file to download URL or video ID  
+Just specify `--file` in command line  
+The `--format` argument will be apply to all audio files, as `--output`  
+
+The `--name` can be used with file mode, PyTube will set automatically the audio file name based on video name
+
+> PyTube will skip invalid URL/ID, empty lines in file or unvalaible videos (country blocking, removed video)
+> Your download process will continue in case of error on a video
+
+### Example with mixed URL and video ID
+
+With a file `references.txt` which have the following content (with some invalid URL/ID for the demo) : 
+```
+https://www.youtube.com/watch?v=L1OeXcUP3hA
+https://www.youtube.com/watch?v=L1OeXcUP
+KG7fIFuQTMw
+KG7fIFuQ123
+https://www.youtube.com/watch?v=qXsuPkyFQuQ
+https://www.youtube.com/watch?v=qXsuPkyAAAA
+FC4AGdwcy-Q
+```
+
+With command line `python3 PyTube.py --mode file --output ~/Downloads/multi --file ~/Downloads/references.txt`, we obtain the following console : 
+
+```
+ 
+
+  _____    _______    _          
+ |  __ \  |__   __|  | |         
+ | |__) |   _| |_   _| |__   ___ 
+ |  ___/ | | | | | | | '_ \ / _ \
+ | |   | |_| | | |_| | |_) |  __/
+ |_|    \__, |_|\__,_|_.__/ \___|
+         __/ |                   
+        |___/                    
+
+[+] Video name auto-detected : Randy Brecker, Mike Stern, Tom Kennedy, L. Cordew & Ozone Makoto - Some Skunk Funk - Tokyo Jazz 2014
+[+] Downloading music from https://www.youtube.com/watch?v=L1OeXcUP3hA
+
+[+] Downloaded successfully
+
+ERROR: Incomplete YouTube ID L1OeXcUP. URL https://www.youtube.com/watch?v=L1OeXcUP
+ looks truncated.
+
+
+[+] Video name auto-detected : Mike Stern - Chromazone
+[+] Downloading music from KG7fIFuQTMw
+
+[+] Downloaded successfully
+
+WARNING: Unable to extract video title
+WARNING: unable to extract description; please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.
+ERROR: This video is unavailable.
+Sorry about that.
+
+
+[+] Video name auto-detected : Hiromi's Sonicbloom - Time Out
+[+] Downloading music from https://www.youtube.com/watch?v=qXsuPkyFQuQ
+
+[+] Downloaded successfully
+
+WARNING: Unable to extract video title
+WARNING: unable to extract description; please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.
+ERROR: This video is unavailable.
+Sorry about that.
+
+
+[+] Video name auto-detected : Hiromi Uehara - Caravan
+[+] Downloading music from FC4AGdwcy-Q
+
+[+] Downloaded successfully
+```
