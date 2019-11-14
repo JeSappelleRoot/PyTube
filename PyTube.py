@@ -70,8 +70,8 @@ def downloadMusic(path, targetVideo, outFormat, name, quiet, verbose):
 
 # --------------------------------------------------------------------------------
 
-def getInfo(url,quiet,verbose):
-# Function to get info about a video, given by URL
+def getInfo(targetVideo,quiet,verbose):
+# Function to get info about a video, given by URL/Youtube ID
 
     # Define options to set quiet mode
     getInfoOptions = {
@@ -88,7 +88,7 @@ def getInfo(url,quiet,verbose):
     infoList = []
     try:
         # Get info
-        yMetaData = yDownloader.extract_info(url, download=False)
+        yMetaData = yDownloader.extract_info(targetVideo, download=False)
 
         # Append info to list
         infoList.append(yMetaData['id'])
