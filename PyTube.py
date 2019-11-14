@@ -150,6 +150,39 @@ def getPlaylistInfos(target):
     return videosID
 
 
+# --------------------------------------------------------------------------------
+
+def getChapters(targetVideo,quiet,verbose):
+# Function to get chapters in video description
+
+    # Define options to set quiet mode
+    getInfoOptions = {
+                        'quiet': quiet,
+                        'verbose':verbose,
+                        'fixup': 'detect_or_warn', 
+                        'ignoreerrors': True
+                        }
+
+    # Initilize Youtube Downloader
+    yDownloader = youtube_dl.YoutubeDL(getInfoOptions)
+    # Extract video informations
+    yMetaData = yDownloader.extract_info(targetVideo, download=False)
+
+    # If video doesn't have values with 'chapters' key in dict
+    # Return False
+    if not yMetaData.get('chapters'):
+        chapters = False
+
+    # Else if video have values with 'chapters' key
+    else:
+        chapters = yMetaData['chapters']
+        
+
+
+
+    return chapters
+
+
 
 # ------------------------------------------------------------------
 # ------------------------------ Main ------------------------------
@@ -163,7 +196,7 @@ formatter_class=argparse.RawDescriptionHelpFormatter,
 # Add a exclusive group to make conflicts between args
 target = parser.add_mutually_exclusive_group()
 
-parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file]', choices=['single','playlist','file'], required=True)
+parser.add_argument('--mode', help='Specifiy the mode to use [url/playlist/file/album]', choices=['single','playlist','file','album'], required=True)
 target.add_argument('--url', help='Get music from this url, only for URL and playlist mode')
 target.add_argument('--id', help='Get music from this Youtube video ID (only for URL and playlist mode)')
 target.add_argument('--file', help='File which contain URL and formats (separated by space)')
@@ -246,6 +279,22 @@ elif mode == 'file':
     # Else if the file exist, assign argument to target
     elif path.isfile(args.file):
         target = args.file
+
+# If mode is album mode
+elif mode == 'album':
+
+    # If a name is gived in argument, album mode choose names of audio files
+    if args.name:
+        print(colored('[!] Album mode only allow automatic name','red'))
+        print(colored('[!] Please remove --name argument','red'))
+        exit()
+
+    # If URL is specified
+    if args.url:
+        target = args.url
+    # Else if Youtube ID is specified
+    elif args.id:
+        target = args.id
 
 
 outputFolder = args.output      # Parse output folder
@@ -421,3 +470,28 @@ elif mode == 'file':
 
                 # Download a single music
                 downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+
+#
+# ------------------------------- Album mode -------------------------------
+#
+
+elif mode == 'album':
+
+
+    videoChapters = getChapters(target, quiet, verbose)
+
+    if videoChapters == False:
+        print(colored(f"[-] Video {target} seems to not have tracklist informations", 'red'))
+        exit()        
+
+    else:
+        print(colored(f"[+] Successfully detected tracklist for {target}", 'green'))
+        print(colored(f"[+] Following automatic splitting will be apply\n", 'green'))
+        
+        for segment in videoChapters:
+            title = segment['title']
+            start = segment['start_time']
+            end = segment['end_time']
+
+            print(f"{title} : {start}s - {end}s")
