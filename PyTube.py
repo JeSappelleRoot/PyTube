@@ -183,6 +183,26 @@ def getChapters(targetVideo,quiet,verbose):
     return chapters
 
 
+# --------------------------------------------------------------------------------
+
+def splitAudio(inputFile, outputFile, start, end, audioFormat):
+# Function to extract section of audio file
+
+    # Define start & and section in milliseconds (seconds given in arguments)
+    start = start * 1000
+    end = end * 1000
+
+    # Import audio file
+    audioFile = AudioSegment.from_file(inputFile, audioFormat)
+    # Define splitted section (as a list !)
+    audioSplitted = audioFile[start:end]
+    # Export audio file
+    audioSplitted.export(outputFile, format=audioFormat)
+
+
+    return
+
+
 
 # ------------------------------------------------------------------
 # ------------------------------ Main ------------------------------
@@ -494,4 +514,17 @@ elif mode == 'album':
             start = segment['start_time']
             end = segment['end_time']
 
-            print(f"{title} : {start}s - {end}s")
+            print(colored(f"{title} : {start}s - {end}s", 'yellow'))
+
+
+        # Get video name automatically
+        videoName = getInfo(target, quiet, verbose)[1]
+
+        # Define a temporary name, before final conversion
+        tempName = f"{videoName}.webm"
+        
+        # Fullpath of the audio file
+        musicFullPath = f"{outputFolder}/{tempName}"
+
+        # Download a single music
+        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
