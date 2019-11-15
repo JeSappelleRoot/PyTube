@@ -517,7 +517,7 @@ elif mode == 'album':
             start = segment['start_time']
             end = segment['end_time']
 
-            print(colored(f"{title} : {start}s - {end}s", 'yellow'))
+            print(colored(f"  - {title} : {start}s - {end}s", 'yellow'))
 
 
         # Get video name automatically
