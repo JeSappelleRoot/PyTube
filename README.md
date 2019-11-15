@@ -59,7 +59,7 @@ Just run `pip3 install -r requirements.txt` to install all modules needed by PyT
 * Official documentation of Youtube_dl module  
  https://github.com/ytdl-org/youtube-dl
 
-* The best source I used to make PyTube  
+* The best source used to make PyTube  
  https://willdrevo.com/downloading-youtube-and-soundcloud-audio-with-python-and-pandas
 
 * Get information about a video   
