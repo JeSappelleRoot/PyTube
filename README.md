@@ -18,8 +18,7 @@ PyTube is an implementation of the great Youtube_dl library
   - [Album mode](#album-mode)
     - [Example with a Youtube video ID](#example-with-a-youtube-video-id)
 
->Do not abuse this material. Be responsible.
-
+>Do not abuse this material. Be responsible.  
 >All the content of PyTube script is for educational and research purposes only. Do not attempt to violate the law with anything contained here. The authors of this material, or anyone else affiliated in any way, are not going to accept responsibility for your actions. 
 
 
@@ -37,6 +36,7 @@ PyTube use several libraries :
 - **os** with **path** to check if folder or file exist  
 - **termcolor** to add color in your boring terminal  
 - **BeautifulSoup** to parse requests module results
+- **pydub** to split audio files (album mode)
 
 
 ## Requirement file
@@ -47,6 +47,7 @@ requests==2.21.0
 youtube_dl==2019.9.28
 termcolor==1.1.0
 beautifulsoup4==4.8.0
+pydub==0.23.1
 ```
 
 Just run `pip3 install -r requirements.txt` to install all modules needed by PyTube
