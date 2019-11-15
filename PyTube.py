@@ -537,9 +537,9 @@ elif mode == 'file':
     
     # Detect CTRL + C combination
     except KeyboardInterrupt:
-    print('\n Quitting PyTube')
-    print('bye.')
-    exit()
+        print('\n Quitting PyTube')
+        print('bye.')
+        exit()
 
 
 #
@@ -593,6 +593,6 @@ elif mode == 'album':
 
     # Detect CTRL + C combination
     except KeyboardInterrupt:
-    print('\n Quitting PyTube')
-    print('bye.')
-    exit()
+        print('\n Quitting PyTube')
+        print('bye.')
+        exit()
