@@ -5,7 +5,7 @@ import youtube_dl
 from os import path
 from termcolor import colored
 from bs4 import BeautifulSoup
-from pydub import AudioSegment
+from pydub import AudioSegment, exceptions
 
 
 def displayBanner():
@@ -155,32 +155,41 @@ def getPlaylistInfos(target):
 def getChapters(targetVideo,quiet,verbose):
 # Function to get chapters in video description
 
-    # Define options to set quiet mode
-    getInfoOptions = {
-                        'quiet': quiet,
-                        'verbose':verbose,
-                        'fixup': 'detect_or_warn', 
-                        'ignoreerrors': True
-                        }
+    try:
 
-    # Initilize Youtube Downloader
-    yDownloader = youtube_dl.YoutubeDL(getInfoOptions)
-    # Extract video informations
-    yMetaData = yDownloader.extract_info(targetVideo, download=False)
+        # Define options to set quiet mode
+        getInfoOptions = {
+                            'quiet': quiet,
+                            'verbose':verbose,
+                            'fixup': 'detect_or_warn', 
+                            'ignoreerrors': True
+                            }
 
-    # If video doesn't have values with 'chapters' key in dict
-    # Return False
-    if not yMetaData.get('chapters'):
-        chapters = False
+        # Initilize Youtube Downloader
+        yDownloader = youtube_dl.YoutubeDL(getInfoOptions)
+        # Extract video informations
+        yMetaData = yDownloader.extract_info(targetVideo, download=False)
 
-    # Else if video have values with 'chapters' key
-    else:
-        chapters = yMetaData['chapters']
+        # If video doesn't have values with 'chapters' key in dict
+        # Return False
+        if not yMetaData.get('chapters'):
+            chapters = False
+
+        # Else if video have values with 'chapters' key
+        else:
+            chapters = yMetaData['chapters']
+
         
+        return chapters
+            
+    # Add except statement 
+    except youtube_dl.DownloadError as error:
+        print(colored(f"[!] Something wrong happened when trying to get chapters of {targetVideo} : ", 'red'))
+        print(error)
+        exit()
 
 
-
-    return chapters
+    
 
 
 # --------------------------------------------------------------------------------
@@ -188,22 +197,29 @@ def getChapters(targetVideo,quiet,verbose):
 def splitAudio(inputFile, outputFile, start, end, audioFormat):
 # Function to extract section of audio file
 
+    try:
 
-    print(colored(f"[+] Extracting {outputFile}", 'yellow'))
+        print(colored(f"[+] Extracting {outputFile}", 'yellow'))
 
-    # Define start & and section in milliseconds (seconds given in arguments)
-    start = start * 1000
-    end = end * 1000
+        # Define start & and section in milliseconds (seconds given in arguments)
+        start = start * 1000
+        end = end * 1000
 
-    # Import audio file
-    audioFile = AudioSegment.from_file(inputFile, audioFormat)
-    # Define splitted section (as a list !)
-    audioSplitted = audioFile[start:end]
-    # Export audio file
-    audioSplitted.export(outputFile, format=audioFormat)
+        # Import audio file
+        audioFile = AudioSegment.from_file(inputFile, audioFormat)
+        # Define splitted section (as a list !)
+        audioSplitted = audioFile[start:end]
+        # Export audio file
+        audioSplitted.export(outputFile, format=audioFormat)
 
+        return
 
-    return
+    # Add except statement
+    except exceptions.PydubException as error:
+        print(colored(f'[!] Something happened when trying extracting {outputFile} : '))
+        print(error)
+        return
+
 
 
 
