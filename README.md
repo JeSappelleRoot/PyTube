@@ -74,6 +74,9 @@ Just run `pip3 install -r requirements.txt` to install all modules needed by PyT
  * Retrieve video links from a Youtube playlist  
  https://www.geeksforgeeks.org/python-program-to-download-complete-youtube-playlist/
 
+ * Split audio files, with pydub documentation  
+https://github.com/jiaaro/pydub
+
 
 # Download music from Youtube
 
