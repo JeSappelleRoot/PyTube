@@ -111,7 +111,7 @@ PyTube can download music from :
 - URL and video ID in **single mode**
 - URL and video ID in **file mode**
 - URL only in **playlist mode**
-- URL and video ID in **album mode**
+- URL and video ID in **album mode**  
 On a video URL (`https://www.youtube.com/watch?v=tLVDOTq5Vc0`), the ID will be the part after `watch?v=` : here it's `tLVDOTq5Vc0`
 
 # Download modes
