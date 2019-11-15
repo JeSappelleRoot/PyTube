@@ -100,7 +100,7 @@ PyTube takes several arguments in command line :
 
 Some arguments are incompatibles : 
 - Only one mode at a time
-- with `--mode single`, you can only use `--id` or `--url` to specify the targeted video
+- with `--mode single` and `--mode album`, you can only use `--id` or `--url` to specify the targeted video
 - with `--mode playlist`, you have to specify entire Youtube video link (see bellow)
 - with `--mode file` and `--mode album`, the argument `--format` will be use for each audio file
 - with `--mode playlist`, `--mode file` and `--mode album`, **you can't specify a name for audio files**, PyTube will choose and assign automatically names (based on video title)
