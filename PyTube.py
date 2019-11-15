@@ -5,7 +5,7 @@ import youtube_dl
 from os import path
 from termcolor import colored
 from bs4 import BeautifulSoup
-
+from pydub import AudioSegment
 
 
 def displayBanner():
@@ -187,6 +187,9 @@ def getChapters(targetVideo,quiet,verbose):
 
 def splitAudio(inputFile, outputFile, start, end, audioFormat):
 # Function to extract section of audio file
+
+
+    print(colored(f"[+] Extracting {outputFile}", 'yellow'))
 
     # Define start & and section in milliseconds (seconds given in arguments)
     start = start * 1000
@@ -523,8 +526,18 @@ elif mode == 'album':
         # Define a temporary name, before final conversion
         tempName = f"{videoName}.webm"
         
-        # Fullpath of the audio file
+        # Fullpath of the temporary audio file
         musicFullPath = f"{outputFolder}/{tempName}"
+        # Fullpath of the final audio file
+        finalMusicFullPath = f"{outputFolder}/{videoName}.{outFormat}"
 
         # Download a single music
         downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+        # Loop on chapters to split the audio
+        for segment in videoChapters:
+            
+            start = segment['start_time']
+            end = segment['end_time']
+            chapterFullPath = f"{outputFolder}/{segment['title']}.{outFormat}"
+            splitAudio(finalMusicFullPath, chapterFullPath, start, end, outFormat)
