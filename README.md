@@ -384,6 +384,8 @@ PyTube can automatically detect chapters sections on a video. It will based on v
 
 ### Example with a Youtube video ID
 
+> You can also specify a video URL, use `--url` argument instead
+
 With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output ~/Music --format flac` : 
 
 ```
@@ -420,5 +422,5 @@ With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output 
   [+] Extracting ~/Music/B4 In a Sentimental Mood.flac
 ```
 
-> You can also specify a video URL
+
 
