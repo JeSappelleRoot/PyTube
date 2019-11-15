@@ -427,7 +427,7 @@ if mode == 'single':
         downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 
     except KeyboardInterrupt:
-        print('\n Quitting PyTube')
+        print("\nQuitting PyTube")
         print('bye.')
         exit()
 
@@ -484,7 +484,7 @@ elif mode == 'playlist':
                 downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
 
     except KeyboardInterrupt:
-        print('\n Quitting PyTube')
+        print("\nQuitting PyTube")
         print('bye.')
         exit()
 
@@ -537,7 +537,7 @@ elif mode == 'file':
     
     # Detect CTRL + C combination
     except KeyboardInterrupt:
-        print('\n Quitting PyTube')
+        print("\nQuitting PyTube")
         print('bye.')
         exit()
 
@@ -593,6 +593,6 @@ elif mode == 'album':
 
     # Detect CTRL + C combination
     except KeyboardInterrupt:
-        print('\n Quitting PyTube')
+        print("\nQuitting PyTube")
         print('bye.')
         exit()
