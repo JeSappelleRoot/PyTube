@@ -85,6 +85,7 @@ PyTube takes several arguments in command line :
   - `single` mode allow to download a single music, from an URL or a video ID
   - `playlist` mode allow to download all music from a Youtube playlist
   - `file` mode allow to download URL or ID from a text file
+  - `album` to automatically detect tracklist and split audio files
 - `--url` specify the Youtube video URL
 - `--id` specify the Youtube video ID
 - `--file` specify the file where are stored URL or ID to download
@@ -101,8 +102,8 @@ Some arguments are incompatibles :
 - Only one mode at a time
 - with `--mode single`, you can only use `--id` or `--url` to specify the targeted video
 - with `--mode playlist`, you have to specify entire Youtube video link (see bellow)
-- with `--mode file`, the argument `--format` will be use for each audio file
-- with `--mode playlist` and `--mode file`, **you can't specify a name for audio files**, PyTube will choose and assign automatically names (based on video title)
+- with `--mode file` and `--mode album`, the argument `--format` will be use for each audio file
+- with `--mode playlist`, `--mode file` and `--mode album`, **you can't specify a name for audio files**, PyTube will choose and assign automatically names (based on video title)
 
 # Full URL or video ID ? 
 
