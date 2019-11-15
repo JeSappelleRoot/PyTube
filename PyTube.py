@@ -528,7 +528,7 @@ elif mode == 'album':
         
         # Fullpath of the temporary audio file
         musicFullPath = f"{outputFolder}/{tempName}"
-        # Fullpath of the final audio file
+        # Fullpath of the final audio file after downloading
         finalMusicFullPath = f"{outputFolder}/{videoName}.{outFormat}"
 
         # Download a single music
