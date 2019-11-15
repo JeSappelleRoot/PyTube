@@ -311,6 +311,11 @@ elif mode == 'album':
         print(colored('[!] Album mode only allow automatic name','red'))
         print(colored('[!] Please remove --name argument','red'))
         exit()
+    
+    elif args.file:
+        print(colored('[!] A URL or and ID must be specified in single mode','red'))
+        print(colored("[!] Please remove --file argument", 'red'))
+        exit()
 
     # If URL is specified
     if args.url:
