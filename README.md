@@ -15,6 +15,8 @@ PyTube is an implementation of the great Youtube_dl library
     - [Example](#example)
   - [File mode download](#file-mode-download)
     - [Example with mixed URL and video ID](#example-with-mixed-url-and-video-id)
+  - [Album mode](#album-mode)
+    - [Example with a Youtube video ID](#example-with-a-youtube-video-id)
 
 
 ## Requirements
@@ -310,8 +312,6 @@ FC4AGdwcy-Q
 With command line `python3 PyTube.py --mode file --output ~/Downloads/multi --file ~/Downloads/references.txt`, we obtain the following console : 
 
 ```
- 
-
   _____    _______    _          
  |  __ \  |__   __|  | |         
  | |__) |   _| |_   _| |__   ___ 
@@ -357,3 +357,50 @@ Sorry about that.
 
 [+] Downloaded successfully
 ```
+## Album mode
+
+PyTube can automatically detect chapters sections on a video. It will based on video tracklist
+
+![chapters](https://user-images.githubusercontent.com/52102633/68952568-b8c22f00-0785-11ea-8781-542118ef4797.png)
+
+> PyTube will automatically set audio files names, based on tracklist  
+> If an audio format is set in command line, it will be apply on each audio files
+### Example with a Youtube video ID
+
+With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output ~/Music --format flac` : 
+
+```
+  _____    _______    _          
+ |  __ \  |__   __|  | |         
+ | |__) |   _| |_   _| |__   ___ 
+ |  ___/ | | | | | | | '_ \ / _ \
+ | |   | |_| | | |_| | |_) |  __/
+ |_|    \__, |_|\__,_|_.__/ \___|
+         __/ |                   
+        |___/                    
+
+  [+] Successfully detected tracklist for Ef7uqh_IJ5o
+  [+] Following automatic splitting will be apply
+  
+  - A1 Strollin' : 0.0s - 334.0s
+  - A2 Look to the Sky : 334.0s - 661.0s
+  - A3 Perk's Blues : 661.0s - 912.0s
+  - A4 The Firefly : 912.0s - 1162.0s
+  - B1 Movin' Along : 1162.0s - 1497.0s
+  - B2 A Taste of Honey : 1497.0s - 1632.0s
+  - B3 Inception : 1632.0s - 1946.0s
+  - B4 In a Sentimental Mood : 1946.0s - 2416s
+  [+] Downloading music from Ef7uqh_IJ5o
+  [+] Downloaded successfully
+  
+  [+] Extracting ~/Music/A1 Strollin'.flac
+  [+] Extracting ~/Music/A2 Look to the Sky.flac
+  [+] Extracting ~/Music/A3 Perk's Blues.flac
+  [+] Extracting ~/Music/A4 The Firefly.flac
+  [+] Extracting ~/Music/B1 Movin' Along.flac
+  [+] Extracting ~/Music/B2 A Taste of Honey.flac
+  [+] Extracting ~/Music/B3 Inception.flac
+  [+] Extracting ~/Music/B4 In a Sentimental Mood.flac
+```
+
+> You can also specify a video URL
