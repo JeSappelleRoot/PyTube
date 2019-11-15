@@ -1,0 +1,6 @@
+argparse==1.2.1
+requests==2.21.0
+youtube_dl==2019.9.28
+termcolor==1.1.0
+beautifulsoup4==4.8.0
+pydub==0.23.1
