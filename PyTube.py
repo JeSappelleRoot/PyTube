@@ -399,28 +399,37 @@ if not path.isdir(outputFolder):
 
 if mode == 'single':
 
-    # If videoName variable doesn't exist
-    if 'videoName' not in locals(): 
-        # Get info if the name is not set by the user
-        # Use the video name instead
-        info = getInfo(target, quiet, verbose)
-        # If can"t retrieve info about a video, skip the link and add empty line
-        if info == False:
-            print("\n")
-            exit()        
+    # Try/Except statement to detect CTRL + C and quit properly 
+    try:
 
-        videoName = info[1]
+        # If videoName variable doesn't exist
+        if 'videoName' not in locals(): 
+            # Get info if the name is not set by the user
+            # Use the video name instead
+            info = getInfo(target, quiet, verbose)
+            # If can"t retrieve info about a video, skip the link and add empty line
+            if info == False:
+                print("\n")
+                exit()        
 
-        # Display auto detected name
-        print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+            videoName = info[1]
 
-    # Define a temporary name, before final conversion
-    tempName = f"{videoName}.webm"
-    # Fullpath of the audio file
-    musicFullPath = f"{outputFolder}/{tempName}"
+            # Display auto detected name
+            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
-    # Download a single music
-    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+        # Define a temporary name, before final conversion
+        tempName = f"{videoName}.webm"
+        # Fullpath of the audio file
+        musicFullPath = f"{outputFolder}/{tempName}"
+
+
+        # Download a single music
+        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+    except KeyboardInterrupt:
+        print('\n Quitting PyTube')
+        print('bye.')
+        exit()
 
 
 
@@ -431,45 +440,53 @@ if mode == 'single':
 
 elif mode == 'playlist':
 
-    # Get ID and index of videos in the playlist
-    playlistInfo = getPlaylistInfos(target)
+                
+    # Try/Except statement to detect CTRL + C and quit properly 
+    try:
 
-    # If the returned dict is empty
-    if len(playlistInfo) == 0:
-        print(colored('[!] Failed to retrieve videos of the playlist','red'))
-    # Else
-    else:
-        print(colored('[+] Videos ID successfully retrieves\n','green'))
-        # Extract ID and index from the dict to download
-        for videoInfo in playlistInfo.items():
-            target = videoInfo[1]
-            videoIndex = videoInfo[0]
-            # If videoIndex is between 1-9, add a 0 at the begining
-            if len(videoIndex) == 1:
-                videoIndex = f"0{videoIndex}"
-            # Get info of the video with the ID
-            info = getInfo(target, quiet, verbose)
+        # Get ID and index of videos in the playlist
+        playlistInfo = getPlaylistInfos(target)
 
-            # If can"t retrieve info about a video, skip the link and add empty line
-            if info == False:
-                print("\n")
-                continue
+        # If the returned dict is empty
+        if len(playlistInfo) == 0:
+            print(colored('[!] Failed to retrieve videos of the playlist','red'))
+        # Else
+        else:
+            print(colored('[+] Videos ID successfully retrieves\n','green'))
+            # Extract ID and index from the dict to download
+            for videoInfo in playlistInfo.items():
+                target = videoInfo[1]
+                videoIndex = videoInfo[0]
+                # If videoIndex is between 1-9, add a 0 at the begining
+                if len(videoIndex) == 1:
+                    videoIndex = f"0{videoIndex}"
+                # Get info of the video with the ID
+                info = getInfo(target, quiet, verbose)
+
+                # If can"t retrieve info about a video, skip the link and add empty line
+                if info == False:
+                    print("\n")
+                    continue
 
 
-            videoName = info[1]
+                videoName = info[1]
 
-            # Display auto detected name
-            print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+                # Display auto detected name
+                print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
-            # Define a temporary name, before final conversion
-            tempName = f"{videoIndex}_{videoName}.webm"
-            videoName = f"{videoIndex}_{videoName}"
-            # Fullpath of the audio file
-            musicFullPath = f"{outputFolder}/{tempName}"
-            
-            # Finally download each music in the playlist 
-            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+                # Define a temporary name, before final conversion
+                tempName = f"{videoIndex}_{videoName}.webm"
+                videoName = f"{videoIndex}_{videoName}"
+                # Fullpath of the audio file
+                musicFullPath = f"{outputFolder}/{tempName}"
 
+                # Finally download each music in the playlist 
+                downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+    except KeyboardInterrupt:
+        print('\n Quitting PyTube')
+        print('bye.')
+        exit()
 
 
 #
@@ -478,42 +495,51 @@ elif mode == 'playlist':
 
 elif mode == 'file':
 
+    # Try/Except statement to detect CTRL + C and quit properly 
+    try:
 
-    # Open file in read mode and get his content
-    with open(target,'r') as fileStream:
-        linkList = fileStream.readlines()
-        
+        # Open file in read mode and get his content
+        with open(target,'r') as fileStream:
+            linkList = fileStream.readlines()
+            
 
-    if len(linkList) == 0:
-        print(colored("[!] Please, don't specify an empty file",'red'))
-        exit()
-    else:
+        if len(linkList) == 0:
+            print(colored("[!] Please, don't specify an empty file",'red'))
+            exit()
+        else:
 
-        for target in linkList:
+            for target in linkList:
 
-            # if line is not empty
-            # bevardgisuser, post n°21
-            # View https://stackoverflow.com/questions/7896495/python-how-to-check-if-a-line-is-an-empty-line
-            if not len(target.strip()) == 0:
-                # Get info about video (name)
-                info = getInfo(target, quiet, verbose)
-                
-                # If can"t retrieve info about a video, skip the link and add empty line
-                if info == False:
-                    print("\n")
-                    continue
+                # if line is not empty
+                # bevardgisuser, post n°21
+                # View https://stackoverflow.com/questions/7896495/python-how-to-check-if-a-line-is-an-empty-line
+                if not len(target.strip()) == 0:
+                    # Get info about video (name)
+                    info = getInfo(target, quiet, verbose)
+                    
+                    # If can"t retrieve info about a video, skip the link and add empty line
+                    if info == False:
+                        print("\n")
+                        continue
 
-                videoName = info[1] 
-                # Display auto detected name
-                print(colored(f'[+] Video name auto-detected : {videoName}','green'))
+                    videoName = info[1] 
+                    # Display auto detected name
+                    print(colored(f'[+] Video name auto-detected : {videoName}','green'))
 
-                # Define a temporary name, before final conversion
-                tempName = f"{videoName}.webm"
-                # Fullpath of the audio file
-                musicFullPath = f"{outputFolder}/{tempName}"
+                    # Define a temporary name, before final conversion
+                    tempName = f"{videoName}.webm"
+                    # Fullpath of the audio file
+                    musicFullPath = f"{outputFolder}/{tempName}"
 
-                # Download a single music
-                downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+                        # Download a single music
+                    downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+    
+    # Detect CTRL + C combination
+    except KeyboardInterrupt:
+    print('\n Quitting PyTube')
+    print('bye.')
+    exit()
 
 
 #
@@ -522,43 +548,51 @@ elif mode == 'file':
 
 elif mode == 'album':
 
+    # Try/Except statement to detect CTRL + C and quit properly
+    try:
 
-    videoChapters = getChapters(target, quiet, verbose)
+        videoChapters = getChapters(target, quiet, verbose)
 
-    if videoChapters == False:
-        print(colored(f"[-] Video {target} seems to not have tracklist informations", 'red'))
-        exit()        
+        if videoChapters == False:
+            print(colored(f"[-] Video {target} seems to not have tracklist informations", 'red'))
+            exit()        
 
-    else:
-        print(colored(f"[+] Successfully detected tracklist for {target}", 'green'))
-        print(colored(f"[+] Following automatic splitting will be apply\n", 'green'))
-        
-        for segment in videoChapters:
-            title = segment['title']
-            start = segment['start_time']
-            end = segment['end_time']
-
-            print(colored(f"  - {title} : {start}s - {end}s", 'yellow'))
-
-
-        # Get video name automatically
-        videoName = getInfo(target, quiet, verbose)[1]
-
-        # Define a temporary name, before final conversion
-        tempName = f"{videoName}.webm"
-        
-        # Fullpath of the temporary audio file
-        musicFullPath = f"{outputFolder}/{tempName}"
-        # Fullpath of the final audio file after downloading
-        finalMusicFullPath = f"{outputFolder}/{videoName}.{outFormat}"
-
-        # Download a single music
-        downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
-
-        # Loop on chapters to split the audio
-        for segment in videoChapters:
+        else:
+            print(colored(f"[+] Successfully detected tracklist for {target}", 'green'))
+            print(colored(f"[+] Following automatic splitting will be apply\n", 'green'))
             
-            start = segment['start_time']
-            end = segment['end_time']
-            chapterFullPath = f"{outputFolder}/{segment['title']}.{outFormat}"
-            splitAudio(finalMusicFullPath, chapterFullPath, start, end, outFormat)
+            for segment in videoChapters:
+                title = segment['title']
+                start = segment['start_time']
+                end = segment['end_time']
+
+                print(colored(f"  - {title} : {start}s - {end}s", 'yellow'))
+
+
+            # Get video name automatically
+            videoName = getInfo(target, quiet, verbose)[1]
+
+            # Define a temporary name, before final conversion
+            tempName = f"{videoName}.webm"
+            
+            # Fullpath of the temporary audio file
+            musicFullPath = f"{outputFolder}/{tempName}"
+            # Fullpath of the final audio file after downloading
+            finalMusicFullPath = f"{outputFolder}/{videoName}.{outFormat}"
+
+            # Download a single music
+            downloadMusic(musicFullPath, target, outFormat, videoName, quiet, verbose)
+
+            # Loop on chapters to split the audio
+            for segment in videoChapters:
+                
+                start = segment['start_time']
+                end = segment['end_time']
+                chapterFullPath = f"{outputFolder}/{segment['title']}.{outFormat}"
+                splitAudio(finalMusicFullPath, chapterFullPath, start, end, outFormat)
+
+    # Detect CTRL + C combination
+    except KeyboardInterrupt:
+    print('\n Quitting PyTube')
+    print('bye.')
+    exit()
