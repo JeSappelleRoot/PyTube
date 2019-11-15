@@ -378,7 +378,9 @@ PyTube can automatically detect chapters sections on a video. It will based on v
 ![chapters](https://user-images.githubusercontent.com/52102633/68952568-b8c22f00-0785-11ea-8781-542118ef4797.png)
 
 > PyTube will automatically set audio files names, based on tracklist  
-> If an audio format is set in command line, it will be apply on each audio files
+> If an audio format is set in command line, it will be apply on each audio files  
+> Source audio file (non splitted) will be conserved
+
 ### Example with a Youtube video ID
 
 With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output ~/Music --format flac` : 
