@@ -17,6 +17,7 @@ PyTube is an implementation of the great Youtube_dl library
     - [Example with mixed URL and video ID](#example-with-mixed-url-and-video-id)
   - [Album mode](#album-mode)
     - [Example with a Youtube video ID](#example-with-a-youtube-video-id)
+- [Troubleshooting](#troubleshooting)
 
 >**Do not abuse this material. Be responsible.**  
 >**All the content of PyTube script is for educational and research purposes only.**  
@@ -423,4 +424,20 @@ With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output 
 ```
 
 
+# Troubleshooting
 
+```
+  _____    _______    _          
+ |  __ \  |__   __|  | |         
+ | |__) |   _| |_   _| |__   ___ 
+ |  ___/ | | | | | | | '_ \ / _ \
+ | |   | |_| | | |_| | |_) |  __/
+ |_|    \__, |_|\__,_|_.__/ \___|
+         __/ |                   
+        |___/                    
+
+ERROR: Signature extraction failed: Traceback (most recent call last):
+```
+
+This message indicate that `youtube-dl` python librairy is not up to date.  
+Just run `pip3 install --upgrade youtube-dl` to fix it
