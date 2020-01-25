@@ -439,5 +439,5 @@ With the command line `python3 PyTube.py --mode album --id Ef7uqh_IJ5o --output 
 ERROR: Signature extraction failed: Traceback (most recent call last):
 ```
 
-This message indicate that `youtube-dl` python librairy is not up to date.  
+This message indicate that `youtube-dl` python library is not up to date.  
 Just run `pip3 install --upgrade youtube-dl` to fix it
